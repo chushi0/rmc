@@ -8,7 +8,9 @@ use godot::{
     prelude::*,
 };
 use num_traits::cast::ToPrimitive;
-use osu_file_parser::{events::Event, hitobjects::HitObject, Decimal, OsuFile, Position};
+use osu_file_parser::{
+    colours::Colour, events::Event, hitobjects::HitObject, Decimal, OsuFile, Position,
+};
 use std::{fmt::Display, path::PathBuf, str::FromStr};
 
 #[derive(Debug, GodotClass, Default)]
@@ -42,6 +44,8 @@ pub struct Beatmap {
     objects: Array<Gd<BeatmapObject>>, // 物件
     #[var]
     timings: Array<Gd<BeatmapTiming>>, // 时间
+    #[var]
+    color: Array<Array<f32>>, // 颜色
 }
 
 #[derive(Debug, GodotClass, Default)]
@@ -51,6 +55,9 @@ pub struct BeatmapObject {
     position: f32, // 位置
     #[var]
     time: u32, // 时间，单位毫秒
+
+    #[var]
+    color_index: u8, // combo 颜色
 }
 
 #[derive(Debug, GodotClass, Default)]
@@ -211,74 +218,11 @@ impl OszFile {
 
 impl Beatmap {
     fn new(osu_file: OsuFile) -> Result<Self> {
-        let difficulty = osu_file.difficulty.unwrap_or_default();
-        let base_slider_multipler: osu_file_parser::osu_file::types::Decimal =
-            difficulty.slider_multiplier.unwrap().into();
-        let base_slider_multipler = base_slider_multipler
-            .get()
-            .clone()
-            .left()
-            .unwrap_or_default()
-            .to_f32()
-            .unwrap_or_default();
+        let timings = Self::parse_timings(&osu_file);
+        let color = Self::parse_color(&osu_file);
+        let objects = Self::parse_objects(&osu_file, color.len() as u8, &timings);
 
         let general = osu_file.general.unwrap_or_default();
-
-        let mut timings: Vec<BeatmapTiming> = Vec::new();
-
-        osu_file
-            .timing_points
-            .unwrap_or_default()
-            .0
-            .into_iter()
-            .for_each(|timing| {
-                let mut slide_speed = timings
-                    .last()
-                    .map(|timing| timing.slide_speed)
-                    .unwrap_or(base_slider_multipler);
-                let mut mspb = timings.last().map(|timing| timing.mspb).unwrap_or(1000);
-
-                if timing.uninherited() {
-                    mspb = (60000.0
-                        / timing
-                            .calc_bpm()
-                            .map(|bpm| bpm.to_f32().unwrap_or(60.0))
-                            .unwrap_or(60.0)) as u32;
-                } else {
-                    slide_speed = base_slider_multipler
-                        * timing
-                            .calc_slider_velocity_multiplier()
-                            .map(|speed| speed.to_f32().unwrap_or(1.0))
-                            .unwrap_or(1.0);
-                }
-
-                let beatmap_timing = BeatmapTiming {
-                    time: timing
-                        .time()
-                        .get()
-                        .clone()
-                        .left()
-                        .unwrap_or_default()
-                        .to_u32()
-                        .unwrap_or_default(),
-                    kiai_mode: timing
-                        .effects()
-                        .map(|effect| effect.kiai_time_enabled())
-                        .unwrap_or_default(),
-                    slide_speed,
-                    mspb,
-                };
-
-                timings.push(beatmap_timing);
-            });
-
-        let objects: Vec<BeatmapObject> = osu_file
-            .hitobjects
-            .unwrap_or_default()
-            .0
-            .into_iter()
-            .flat_map(|object| BeatmapObject::flat(&timings, object))
-            .collect();
 
         let audio =
             Into::<PathBuf>::into(general.audio_filename.ok_or(anyhow!("audio not found"))?)
@@ -344,13 +288,6 @@ impl Beatmap {
             }
             array
         };
-        let objects = {
-            let mut array = Array::new();
-            for object in objects {
-                array.push(Gd::from_object(object));
-            }
-            array
-        };
 
         Ok(Beatmap {
             preview_time,
@@ -359,121 +296,206 @@ impl Beatmap {
             audio,
             background,
             video,
+            color,
             objects,
             timings,
         })
     }
+
+    fn parse_timings(osu_file: &OsuFile) -> Vec<BeatmapTiming> {
+        // 解析基础滑条速率
+        let difficulty = osu_file.difficulty.clone().unwrap_or_default();
+        let base_slider_multipler: osu_file_parser::osu_file::types::Decimal =
+            difficulty.slider_multiplier.unwrap().into();
+        let base_slider_multipler = base_slider_multipler
+            .get()
+            .clone()
+            .left()
+            .unwrap_or_default()
+            .to_f32()
+            .unwrap_or_default();
+
+        // 解析时间轴
+        let mut timings: Vec<BeatmapTiming> = Vec::new();
+
+        if let Some(timing_points) = &osu_file.timing_points {
+            for timing in &timing_points.0 {
+                let mut slide_speed = timings
+                    .last()
+                    .map(|timing| timing.slide_speed)
+                    .unwrap_or(base_slider_multipler);
+                let mut mspb = timings.last().map(|timing| timing.mspb).unwrap_or(1000);
+
+                if timing.uninherited() {
+                    mspb = (60000.0
+                        / timing
+                            .calc_bpm()
+                            .map(|bpm| bpm.to_f32().unwrap_or(60.0))
+                            .unwrap_or(60.0)) as u32;
+                } else {
+                    slide_speed = base_slider_multipler
+                        * timing
+                            .calc_slider_velocity_multiplier()
+                            .map(|speed| speed.to_f32().unwrap_or(1.0))
+                            .unwrap_or(1.0);
+                }
+
+                let beatmap_timing = BeatmapTiming {
+                    time: timing
+                        .time()
+                        .get()
+                        .clone()
+                        .left()
+                        .unwrap_or_default()
+                        .to_u32()
+                        .unwrap_or_default(),
+                    kiai_mode: timing
+                        .effects()
+                        .map(|effect| effect.kiai_time_enabled())
+                        .unwrap_or_default(),
+                    slide_speed,
+                    mspb,
+                };
+
+                timings.push(beatmap_timing);
+            }
+        }
+
+        timings
+    }
+
+    fn parse_color(osu_file: &OsuFile) -> Array<Array<f32>> {
+        let mut colors = Vec::new();
+
+        if let Some(color) = &osu_file.colours {
+            for color in &color.0 {
+                if let Colour::Combo(index, rgb) = color {
+                    colors.push((
+                        *index,
+                        (
+                            rgb.red as f32 / 255.,
+                            rgb.green as f32 / 255.,
+                            rgb.blue as f32 / 255.,
+                        ),
+                    ));
+                }
+            }
+        }
+
+        if colors.is_empty() {
+            colors.push((0, (1., 1., 1.)))
+        }
+
+        colors.sort_by_key(|(index, _)| *index);
+
+        let mut result = Array::new();
+        for (_, (r, g, b)) in colors {
+            let mut rgb = Array::new();
+            rgb.push(r);
+            rgb.push(g);
+            rgb.push(b);
+            result.push(rgb);
+        }
+        result
+    }
+
+    fn parse_objects(
+        osu_file: &OsuFile,
+        combo_color_count: u8,
+        timings: &[BeatmapTiming],
+    ) -> Array<Gd<BeatmapObject>> {
+        let mut objects = Vec::new();
+
+        let mut combo_color = 1;
+        if let Some(hitobjects) = &osu_file.hitobjects {
+            for object in &hitobjects.0 {
+                if object.new_combo {
+                    let mut skip_count = object.combo_skip_count.get();
+                    if skip_count == 0 {
+                        skip_count = 1;
+                    }
+                    combo_color += skip_count;
+                    combo_color %= combo_color_count;
+                }
+
+                for item in BeatmapObject::flat(timings, object, combo_color) {
+                    objects.push(item);
+                }
+            }
+        }
+
+        let mut result = Array::new();
+        for object in objects {
+            result.push(Gd::from_object(object));
+        }
+        result
+    }
 }
 
 impl BeatmapObject {
-    fn new(position: f32, time: u32) -> BeatmapObject {
+    fn new(position: f32, time: u32, color_index: u8) -> BeatmapObject {
         // position
         // OSU的x坐标范围：0 ~ 512
         // 需要将其转换为 0 ~ 180 范围（对应半圆），其中90对应水平方向
         let position = position / 512.0 * 180.0;
-        Self { position, time }
+        Self {
+            position,
+            time,
+            color_index,
+        }
     }
 
-    fn flat(timings: &[BeatmapTiming], object: HitObject) -> Vec<BeatmapObject> {
-        fn from_osu_position(position: Position) -> (f32, f32) {
-            (
-                position
-                    .x
-                    .get()
-                    .clone()
-                    .left()
-                    .unwrap_or_default()
-                    .to_f32()
-                    .unwrap_or_default(),
-                position
-                    .y
-                    .get()
-                    .clone()
-                    .left()
-                    .unwrap_or_default()
-                    .to_f32()
-                    .unwrap_or_default(),
-            )
-        }
-
-        fn from_osu_decimal(decimal: Decimal) -> u32 {
-            decimal
-                .get()
-                .clone()
-                .left()
-                .unwrap_or_default()
-                .to_u32()
-                .unwrap_or_default()
-        }
-
-        fn compute_slide_end_time(
-            timings: &[BeatmapTiming],
-            start_time: u32,
-            slide_length: u32,
-        ) -> u32 {
-            let mut remain_length = slide_length;
-            for i in 0..timings.len() {
-                let timing_start_time = timings[i].time.max(start_time);
-                let end_time = if i + 1 == timings.len() {
-                    u32::MAX
-                } else {
-                    timings[i + 1].time
-                };
-                if end_time < start_time || end_time <= timing_start_time {
-                    continue;
-                }
-                let slide_speed = timings[i].slide_speed;
-                let mspb = timings[i].mspb as f32;
-                let max_go_distance =
-                    (end_time - timing_start_time) as f32 * slide_speed * 100.0 / mspb;
-                if max_go_distance > remain_length as f32 {
-                    return (remain_length as f32 / slide_speed / 100.0 * mspb) as u32
-                        + timing_start_time;
-                }
-
-                remain_length -= max_go_distance as u32
-            }
-
-            unreachable!()
-        }
-
-        match object.obj_params {
+    fn flat(timings: &[BeatmapTiming], object: &HitObject, color_index: u8) -> Vec<BeatmapObject> {
+        match &object.obj_params {
             osu_file_parser::hitobjects::HitObjectParams::HitCircle => vec![BeatmapObject::new(
-                from_osu_position(object.position).0,
-                from_osu_decimal(object.time),
+                Self::from_osu_position(&object.position).0,
+                Self::from_osu_decimal(&object.time),
+                color_index,
             )],
             osu_file_parser::hitobjects::HitObjectParams::Slider(params) => {
-                let start_time = from_osu_decimal(object.time);
-                let length = from_osu_decimal(params.length);
-                let end_time = compute_slide_end_time(timings, start_time, length);
+                let start_time = Self::from_osu_decimal(&object.time);
+                let length = Self::from_osu_decimal(&params.length);
+                let end_time = Self::compute_slide_end_time(timings, start_time, length);
                 let duration = end_time - start_time;
 
-                let points: Vec<_> = vec![from_osu_position(object.position)]
+                let points: Vec<_> = vec![Self::from_osu_position(&object.position)]
                     .into_iter()
                     .chain(
                         params
                             .curve_points
-                            .into_iter()
-                            .map(|point| from_osu_position(point.0)),
+                            .iter()
+                            .map(|point| Self::from_osu_position(&point.0)),
                     )
                     .collect();
 
                 let mut result = Vec::new();
                 let mut time = start_time;
-                result.push(BeatmapObject::new(points.first().unwrap().0, time));
+                result.push(BeatmapObject::new(
+                    points.first().unwrap().0,
+                    time,
+                    color_index,
+                ));
                 for i in 0..params.slides {
                     time += duration;
                     if i % 2 == 0 {
-                        result.push(BeatmapObject::new(points.last().unwrap().0, time))
+                        result.push(BeatmapObject::new(
+                            points.last().unwrap().0,
+                            time,
+                            color_index,
+                        ))
                     } else {
-                        result.push(BeatmapObject::new(points.first().unwrap().0, time))
+                        result.push(BeatmapObject::new(
+                            points.first().unwrap().0,
+                            time,
+                            color_index,
+                        ))
                     }
                 }
                 result
             }
             osu_file_parser::hitobjects::HitObjectParams::Spinner { end_time } => {
-                let mut start_time = from_osu_decimal(object.time);
-                let end_time = from_osu_decimal(end_time);
+                let mut start_time = Self::from_osu_decimal(&object.time);
+                let end_time = Self::from_osu_decimal(end_time);
 
                 let mut result = Vec::new();
 
@@ -482,6 +504,7 @@ impl BeatmapObject {
                     result.push(BeatmapObject {
                         position: angle,
                         time: start_time,
+                        color_index,
                     });
                     start_time += 100;
                     angle += 5.0;
@@ -490,14 +513,14 @@ impl BeatmapObject {
                 result
             }
             osu_file_parser::hitobjects::HitObjectParams::OsuManiaHold { end_time } => {
-                let mut start_time = from_osu_decimal(object.time);
-                let end_time = from_osu_decimal(end_time);
+                let mut start_time = Self::from_osu_decimal(&object.time);
+                let end_time = Self::from_osu_decimal(end_time);
 
                 let mut result = Vec::new();
 
-                let position = from_osu_position(object.position);
+                let position = Self::from_osu_position(&object.position);
                 while start_time < end_time {
-                    result.push(BeatmapObject::new(position.0, start_time));
+                    result.push(BeatmapObject::new(position.0, start_time, color_index));
                     start_time += 100;
                 }
 
@@ -505,6 +528,68 @@ impl BeatmapObject {
             }
             _ => unreachable!(),
         }
+    }
+
+    fn from_osu_position(position: &Position) -> (f32, f32) {
+        (
+            position
+                .x
+                .get()
+                .clone()
+                .left()
+                .unwrap_or_default()
+                .to_f32()
+                .unwrap_or_default(),
+            position
+                .y
+                .get()
+                .clone()
+                .left()
+                .unwrap_or_default()
+                .to_f32()
+                .unwrap_or_default(),
+        )
+    }
+
+    fn from_osu_decimal(decimal: &Decimal) -> u32 {
+        decimal
+            .get()
+            .clone()
+            .left()
+            .unwrap_or_default()
+            .to_u32()
+            .unwrap_or_default()
+    }
+
+    fn compute_slide_end_time(
+        timings: &[BeatmapTiming],
+        start_time: u32,
+        slide_length: u32,
+    ) -> u32 {
+        let mut remain_length = slide_length;
+        for i in 0..timings.len() {
+            let timing_start_time = timings[i].time.max(start_time);
+            let end_time = if i + 1 == timings.len() {
+                u32::MAX
+            } else {
+                timings[i + 1].time
+            };
+            if end_time < start_time || end_time <= timing_start_time {
+                continue;
+            }
+            let slide_speed = timings[i].slide_speed;
+            let mspb = timings[i].mspb as f32;
+            let max_go_distance =
+                (end_time - timing_start_time) as f32 * slide_speed * 100.0 / mspb;
+            if max_go_distance > remain_length as f32 {
+                return (remain_length as f32 / slide_speed / 100.0 * mspb) as u32
+                    + timing_start_time;
+            }
+
+            remain_length -= max_go_distance as u32
+        }
+
+        unreachable!()
     }
 }
 

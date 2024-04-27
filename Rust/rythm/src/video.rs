@@ -7,7 +7,7 @@ use ffmpeg_next::software::scaling::{context::Context, flag::Flags};
 use ffmpeg_next::{frame, Rational};
 use godot::prelude::*;
 use std::fmt::Debug;
-use std::sync::mpsc::{self, Receiver, SyncSender};
+use std::sync::mpsc::{self, Receiver, SyncSender, TryRecvError};
 use std::thread::{self, Thread};
 
 #[derive(Debug, GodotClass, Default)]
@@ -15,6 +15,7 @@ use std::thread::{self, Thread};
 pub struct VideoDecoder {
     decode_thread: Option<Thread>,
     recv_channel: Option<Receiver<VideoFrame>>,
+    closed: bool,
 }
 
 #[derive(Debug, GodotClass, Default)]
@@ -50,12 +51,24 @@ impl VideoDecoder {
 
     #[func]
     pub fn try_recv_frame(&mut self) -> Gd<VideoFrame> {
-        self.recv_channel
+        let recv_frame = self
+            .recv_channel
             .as_mut()
-            .map(|channel| channel.recv().ok())
-            .flatten()
+            .map(|channel| channel.try_recv())
+            .unwrap_or(Err(TryRecvError::Empty));
+        if let Err(TryRecvError::Disconnected) = recv_frame {
+            self.closed = true;
+        }
+
+        recv_frame
+            .ok()
             .map(|frame| Gd::from_object(frame))
             .unwrap_or_else(Gd::default)
+    }
+
+    #[func]
+    pub fn is_finish(&self) -> bool {
+        self.closed
     }
 }
 

@@ -26,7 +26,7 @@ var now_showing: bool = true
 func _ready():
 	$Sprite3D.texture = ImageTexture.create_from_image(GameStatus.current_background())
 	
-	if GameStatus.mvmode:
+	if GameStatus.mvmode and FileAccess.file_exists(GameStatus.current_video_path()):
 		decoder = VideoDecoder.new()
 		decoder.start_decode_thread(GameStatus.current_video_path())
 		next_frame_video_time = 0
@@ -55,6 +55,10 @@ func _process(delta):
 
 func update_video(delta):
 	if decoder == null:
+		return
+	if decoder.is_finish():
+		decoder = null
+		$Sprite3D.texture = ImageTexture.create_from_image(GameStatus.current_background())
 		return
 	var frame = null
 	while -position.z > next_frame_video_time:
@@ -96,7 +100,7 @@ func update_input_angle(delta):
 		base /= 2
 	if Input.is_key_pressed(KEY_UP) || Input.is_key_pressed(KEY_RIGHT):
 		input_angle += base * delta
-	if Input.is_key_pressed(KEY_DOWN) || Input.is_key_pressed(KEY_LEFT	):
+	if Input.is_key_pressed(KEY_DOWN) || Input.is_key_pressed(KEY_LEFT):
 		input_angle -= base * delta
 	# Android
 	if android_sensor != null:

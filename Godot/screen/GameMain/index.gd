@@ -34,9 +34,10 @@ func _ready():
 			if angle > 90:
 				angle = 180 - angle
 			angle += 45
-			
-		add_object(time, angle)
-		add_object(time, angle + 180)
+		
+		var color = level.color[object.color_index]
+		add_object(time, angle, color)
+		add_object(time, angle + 180, color)
 	self.timings = level.timings
 	
 	if GameStatus.half_time:
@@ -48,13 +49,13 @@ func _ready():
 	if GameStatus.autoplay:
 		$Camera.auto_play = true
 
-	setup_autoplay_target(-waiting)
+	setup_autoplay_target( - waiting)
 
-func add_object(time, angle):
-	var node = preload("res://screen/GameMain/Object.tscn").instantiate()
+func add_object(time, angle, color: Array[float]):
+	var node = preload ("res://screen/GameMain/Object.tscn").instantiate()
 	node.position.z = -time / 1000.0
 	node.position.x = 2.3 * sin(angle * PI / 180)
-	node.position.y = 2.3 * -cos(angle * PI / 180)
+	node.position.y = 2.3 * - cos(angle * PI / 180)
 	if GameStatus.easy_mode:
 		node.scale.x = 0.41
 		node.scale.y = 0.41
@@ -63,6 +64,7 @@ func add_object(time, angle):
 		node.scale.x = 0.21
 		node.scale.y = 0.21
 		node.scale.z = 0.21
+	node.set_color(color[0], color[1], color[2])
 	$Objects.add_child(node)
 	objects.push_back({
 		"node": node,
@@ -82,7 +84,7 @@ func _process(delta):
 	$Camera.position.z = -time
 
 	# 判定
-	while objects.size() > 0 && objects[0].time < time:
+	while objects.size() > 0&&objects[0].time < time:
 		var object = objects.pop_front()
 		var node: Node = object.node
 		var determine = node.get_determine()
@@ -99,10 +101,10 @@ func _process(delta):
 		$Objects.remove_child(node)
 		node.queue_free()
 		# 判定文字展示
-		var determine_node = preload("res://screen/GameMain/Determine.tscn").instantiate()
+		var determine_node = preload ("res://screen/GameMain/Determine.tscn").instantiate()
 		determine_node.position.z = 0
 		determine_node.position.x = 2.3 * sin(object.angle)
-		determine_node.position.y = 2.3 * -cos(object.angle)
+		determine_node.position.y = 2.3 * - cos(object.angle)
 		$Camera.add_child(determine_node)
 		determine_node.anim(determine)
 		# combo
@@ -112,8 +114,8 @@ func _process(delta):
 			$Camera.clear_combo()
 		if $Camera.combo > max_combo:
 			max_combo = $Camera.combo
-		score += ($Camera.combo + 1) * [0, 50, 100, 300][determine-1] * GameStatus.score_mul
-		acc_count[determine-1] += 1
+		score += ($Camera.combo + 1) * [0, 50, 100, 300][determine - 1] * GameStatus.score_mul
+		acc_count[determine - 1] += 1
 		change_score_and_acc()
 		setup_autoplay_target(time)
 
@@ -125,7 +127,7 @@ func _process(delta):
 			current_timing = timing
 			continue
 		break
-	if current_timing != null && current_timing.kiai_mode && !GameStatus.no_kiai:
+	if current_timing != null&&current_timing.kiai_mode&&!GameStatus.no_kiai:
 		if !in_kiai_mode:
 			$ParticlesLeft.emitting = true
 			$ParticlesRight.emitting = true
@@ -150,7 +152,6 @@ func _process(delta):
 	# 如果下一个物件在1秒以内，显示
 	if objects.size() > 0 and objects[0].time - time < 2:
 		$Camera.fade_in()
-
 
 func setup_autoplay_target(time):
 	if objects.size() > 0:
