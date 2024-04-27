@@ -1,0 +1,41 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="RMC"
+run/main_scene="res://screen/GameTitle/index.tscn"
+config/use_custom_user_dir=true
+config/custom_user_dir_name="cszt0/rmc"
+config/quit_on_go_back=false
+config/features=PackedStringArray("4.2", "Mobile")
+config/icon="res://icon.svg"
+
+[autoload]
+
+GameStatus="*res://global_status/GameStatus.tscn"
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep_height"
+
+[editor]
+
+movie_writer/movie_file="E:/Workspace/Godot/RMC/export/record.avi"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/EditorImport/plugin.cfg", "res://addons/GDExtensionAndroidObtainFile/plugin.cfg", "res://addons/GDExtensionAndroidSensors/plugin.cfg")
+
+[rendering]
+
+renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true

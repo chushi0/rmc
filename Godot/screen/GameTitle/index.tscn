@@ -1,0 +1,254 @@
+[gd_scene load_steps=4 format=3 uid="uid://f32hawmyhln1"]
+
+[ext_resource type="Script" path="res://screen/GameTitle/index.gd" id="1_0hum5"]
+[ext_resource type="PackedScene" uid="uid://dt4vt666l273d" path="res://screen/GameTitle/GyroscopeAlign.tscn" id="4_vf5y2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_24vvr"]
+font_size = 24
+
+[node name="Index" type="Node2D"]
+script = ExtResource("1_0hum5")
+metadata/_edit_lock_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(-1, -1)
+metadata/_edit_lock_ = true
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_left = -751.0
+offset_top = -423.0
+offset_right = 749.0
+offset_bottom = 421.0
+color = Color(0, 0, 0, 0.752941)
+metadata/_edit_lock_ = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="DifficultyLabel" type="Label" parent="."]
+offset_left = -430.0
+offset_top = -183.0
+offset_right = -329.0
+offset_bottom = -142.0
+text = "难度选择："
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="PrevDifficulty" type="Button" parent="."]
+offset_left = -329.0
+offset_top = -183.0
+offset_right = -263.0
+offset_bottom = -142.0
+text = "<"
+metadata/_edit_lock_ = true
+
+[node name="NextDifficulty" type="Button" parent="."]
+offset_left = 103.0
+offset_top = -183.0
+offset_right = 169.0
+offset_bottom = -142.0
+text = ">"
+metadata/_edit_lock_ = true
+
+[node name="Difficulty" type="Label" parent="."]
+offset_left = -263.0
+offset_top = -183.0
+offset_right = 103.0
+offset_bottom = -142.0
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="MusicLabel" type="Label" parent="."]
+offset_left = -430.0
+offset_top = -250.0
+offset_right = -329.0
+offset_bottom = -209.0
+text = "歌曲选择："
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="PrevMusic" type="Button" parent="."]
+offset_left = -329.0
+offset_top = -250.0
+offset_right = -263.0
+offset_bottom = -209.0
+text = "<"
+metadata/_edit_lock_ = true
+
+[node name="NextMusic" type="Button" parent="."]
+offset_left = 103.0
+offset_top = -250.0
+offset_right = 169.0
+offset_bottom = -209.0
+text = ">"
+metadata/_edit_lock_ = true
+
+[node name="Music" type="Label" parent="."]
+offset_left = -263.0
+offset_top = -250.0
+offset_right = 103.0
+offset_bottom = -209.0
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="StartGame" type="Button" parent="."]
+offset_left = 289.0
+offset_top = -183.0
+offset_right = 447.0
+offset_bottom = -142.0
+text = "开始游戏"
+metadata/_edit_lock_ = true
+
+[node name="ImportMusic" type="Button" parent="."]
+offset_left = 289.0
+offset_top = -250.0
+offset_right = 447.0
+offset_bottom = -209.0
+text = "导入谱面"
+metadata/_edit_lock_ = true
+
+[node name="Easy" type="VBoxContainer" parent="."]
+offset_left = -509.0
+offset_top = -94.0
+offset_right = -156.0
+offset_bottom = 34.0
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="Easy"]
+layout_mode = 2
+text = "降低难度，减少分数"
+horizontal_alignment = 1
+
+[node name="EasyMode" type="CheckBox" parent="Easy"]
+layout_mode = 2
+text = "【EasyMode】增大Note半径，增加判定距离"
+
+[node name="HalfTime" type="CheckBox" parent="Easy"]
+layout_mode = 2
+text = "【HalfTime】速度变为0.75倍，歌曲降调"
+
+[node name="RangeLimit" type="CheckBox" parent="Easy"]
+layout_mode = 2
+text = "【RangeLimit】角度限定在±45°范围内"
+
+[node name="Hard" type="VBoxContainer" parent="."]
+offset_left = -509.0
+offset_top = 74.0
+offset_right = -153.0
+offset_bottom = 202.0
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="Hard"]
+layout_mode = 2
+text = "提高难度，增加分数"
+horizontal_alignment = 1
+
+[node name="HardMode" type="CheckBox" parent="Hard"]
+layout_mode = 2
+text = "【HardMode】减小Note半径，降低判定距离"
+
+[node name="DoubleTime" type="CheckBox" parent="Hard"]
+layout_mode = 2
+text = "【DoubleTime】速度变为1.5倍，歌曲升调"
+
+[node name="Hidden" type="CheckBox" parent="Hard"]
+layout_mode = 2
+text = "【Hidden】隐藏所有Note"
+
+[node name="Extra" type="VBoxContainer" parent="."]
+offset_left = 100.0
+offset_top = -89.0
+offset_right = 508.0
+offset_bottom = 179.0
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="Extra"]
+layout_mode = 2
+text = "特殊模式"
+horizontal_alignment = 1
+
+[node name="AutoPlay" type="CheckBox" parent="Extra"]
+layout_mode = 2
+text = "【AutoPlay】自动演奏"
+
+[node name="MvMode" type="CheckBox" parent="Extra"]
+layout_mode = 2
+text = "【MvMode】播放背景视频"
+
+[node name="AllPerfect" type="CheckBox" parent="Extra"]
+layout_mode = 2
+text = "【AllPerfect】Good和Bad均判定为Miss"
+
+[node name="NoKiai" type="CheckBox" parent="Extra"]
+layout_mode = 2
+text = "【NoKiai】关闭KiaiMode"
+
+[node name="Reverse" type="CheckBox" parent="Extra"]
+layout_mode = 2
+text = "【Reverse】反转输入"
+
+[node name="FixArrow" type="CheckBox" parent="Extra"]
+layout_mode = 2
+text = "【FixArrow】固定判定箭头，改为背景旋转"
+
+[node name="Gyroscope" type="CheckBox" parent="Extra"]
+layout_mode = 2
+text = "【Gyroscope】使用陀螺仪代替重力传感器"
+
+[node name="ScoreMul" type="Label" parent="."]
+offset_left = 169.0
+offset_top = 219.0
+offset_right = 249.0
+offset_bottom = 242.0
+text = "分数倍数："
+metadata/_edit_lock_ = true
+
+[node name="ScoreMulValue" type="Label" parent="."]
+offset_left = 249.0
+offset_top = 209.0
+offset_right = 343.0
+offset_bottom = 243.0
+text = "1.00"
+label_settings = SubResource("LabelSettings_24vvr")
+metadata/_edit_lock_ = true
+
+[node name="GyroscopeAlign" parent="." instance=ExtResource("4_vf5y2")]
+visible = false
+
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+initial_position = 1
+size = Vector2i(575, 329)
+ok_button_text = "打开"
+cancel_button_text = "取消"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.osz;Osu Beatmap Zip File")
+show_hidden_files = true
+use_native_dialog = true
+
+[connection signal="finished" from="AudioStreamPlayer" to="." method="_on_audio_stream_player_finished"]
+[connection signal="pressed" from="PrevDifficulty" to="." method="_on_prev_difficulty_pressed"]
+[connection signal="pressed" from="NextDifficulty" to="." method="_on_next_difficulty_pressed"]
+[connection signal="pressed" from="PrevMusic" to="." method="_on_prev_music_pressed"]
+[connection signal="pressed" from="NextMusic" to="." method="_on_next_music_pressed"]
+[connection signal="pressed" from="StartGame" to="." method="_on_start_game_pressed"]
+[connection signal="pressed" from="ImportMusic" to="." method="_on_import_music_pressed"]
+[connection signal="toggled" from="Easy/EasyMode" to="." method="_on_easy_mode_toggled"]
+[connection signal="toggled" from="Easy/HalfTime" to="." method="_on_half_time_toggled"]
+[connection signal="toggled" from="Easy/RangeLimit" to="." method="_on_range_limit_toggled"]
+[connection signal="toggled" from="Hard/HardMode" to="." method="_on_hard_mode_toggled"]
+[connection signal="toggled" from="Hard/DoubleTime" to="." method="_on_double_time_toggled"]
+[connection signal="toggled" from="Hard/Hidden" to="." method="_on_hidden_toggled"]
+[connection signal="toggled" from="Extra/AutoPlay" to="." method="_on_auto_play_toggled"]
+[connection signal="toggled" from="Extra/MvMode" to="." method="_on_mv_mode_toggled"]
+[connection signal="toggled" from="Extra/AllPerfect" to="." method="_on_all_perfect_toggled"]
+[connection signal="toggled" from="Extra/NoKiai" to="." method="_on_no_kiai_toggled"]
+[connection signal="toggled" from="Extra/Reverse" to="." method="_on_reverse_toggled"]
+[connection signal="toggled" from="Extra/FixArrow" to="." method="_on_fix_arrow_toggled"]
+[connection signal="toggled" from="Extra/Gyroscope" to="." method="_on_gyroscope_toggled"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

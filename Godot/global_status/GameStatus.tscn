@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://batg1gjir2cmw"]
+
+[ext_resource type="Script" path="res://global_status/GameStatus.gd" id="1_fring"]
+
+[node name="GameStatus" type="Node"]
+script = ExtResource("1_fring")

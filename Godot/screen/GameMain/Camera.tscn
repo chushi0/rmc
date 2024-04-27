@@ -1,0 +1,745 @@
+[gd_scene load_steps=23 format=3 uid="uid://ow4dnk2vmv0n"]
+
+[ext_resource type="Texture2D" uid="uid://dieemtu7ox58d" path="res://screen/GameMain/circle.png" id="1_m8y5g"]
+[ext_resource type="Script" path="res://screen/GameMain/Camera.gd" id="1_maxwo"]
+[ext_resource type="Texture2D" uid="uid://daa7x77m0tc7x" path="res://screen/GameMain/arrow.png" id="3_grcrf"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_l3sku"]
+size = Vector2(1280, 720)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mkgkn"]
+size = Vector3(0.287, 0.246, 0.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_h280m"]
+size = Vector3(0.28, 0.166894, 0.0651367)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c5u8u"]
+size = Vector3(0.28, 0.143719, 0.0391357)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hhpkw"]
+size = Vector3(8.44028, 9.62137, 10.0744)
+
+[sub_resource type="Gradient" id="Gradient_epxo0"]
+colors = PackedColorArray(1, 0, 0.690196, 1, 1, 0, 0.690196, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l78kx"]
+gradient = SubResource("Gradient_epxo0")
+width = 2
+
+[sub_resource type="Gradient" id="Gradient_5vh1n"]
+colors = PackedColorArray(1, 0.780392, 0, 1, 1, 0.780392, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wsf8c"]
+gradient = SubResource("Gradient_5vh1n")
+width = 2
+
+[sub_resource type="Gradient" id="Gradient_fchjs"]
+colors = PackedColorArray(0, 0.780392, 0.25098, 1, 0, 0.780392, 0.25098, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_taty1"]
+gradient = SubResource("Gradient_fchjs")
+width = 2
+
+[sub_resource type="Animation" id="Animation_ct36r"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Circle:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.501961, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Arrow/Left:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.752941, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Arrow/Right:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.752941, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Arrow/Left:position:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(-2.695, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Arrow/Right:position:x")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(2.695, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:modulate:r")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.27451, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/6/type = "bezier"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D:modulate:g")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.27451, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/7/type = "bezier"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D:modulate:b")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.27451, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/8/type = "bezier"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Sprite3D:modulate:a")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/9/type = "bezier"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("Combo:font_size")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_tajah"]
+resource_name = "combo"
+length = 0.5
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Combo:font_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(48, -0.25, 0, 0.25, 0, 32, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.5)
+}
+
+[sub_resource type="Animation" id="Animation_uae2w"]
+resource_name = "kiai"
+length = 0.1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Circle:modulate:a")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.501961, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Arrow/Left:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.752941, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Arrow/Right:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 0.752941, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Arrow/Left:position:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(-2.745, -0.25, 0, 0.25, 0, -2.695, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Arrow/Right:position:x")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(2.745, -0.25, 0, 0.25, 0, 2.695, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Sprite3D:modulate:r")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.368627, -0.25, 0, 0.25, 0, 0.27451, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+tracks/6/type = "bezier"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Sprite3D:modulate:g")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.368627, -0.25, 0, 0.25, 0, 0.27451, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+tracks/7/type = "bezier"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Sprite3D:modulate:b")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0.368627, -0.25, 0, 0.25, 0, 0.27451, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+tracks/8/type = "bezier"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("Sprite3D:modulate:a")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 0.1)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rmmhe"]
+_data = {
+"RESET": SubResource("Animation_ct36r"),
+"combo": SubResource("Animation_tajah"),
+"kiai": SubResource("Animation_uae2w")
+}
+
+[sub_resource type="Animation" id="Animation_w5vwu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.27451, 0.27451, 0.27451, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Arrow/Left:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.752941)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Arrow/Right:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.752941)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Circle:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.501961)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MoveCircle:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.270588)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Combo:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Combo:outline_modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_g858m"]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MoveCircle:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.270588)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Circle:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.501961)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite3D:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.27451, 0.27451, 0.27451, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Arrow/Left:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.752941)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Arrow/Right:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.752941)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Combo:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Combo:outline_modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_npwkf"]
+resource_name = "fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite3D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.27451, 0.27451, 0.27451, 1), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Arrow/Left:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.752941), Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Arrow/Right:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.752941), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Circle:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.501961), Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MoveCircle:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.270588), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Combo:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Combo:outline_modulate")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_s85y0"]
+_data = {
+"RESET": SubResource("Animation_w5vwu"),
+"fade_in": SubResource("Animation_g858m"),
+"fade_out": SubResource("Animation_npwkf")
+}
+
+[node name="Camera" type="Node3D"]
+script = ExtResource("1_maxwo")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.275)
+projection = 2
+far = 1.55
+metadata/_edit_lock_ = true
+
+[node name="Circle" type="Sprite3D" parent="."]
+modulate = Color(1, 1, 1, 0.501961)
+texture = ExtResource("1_m8y5g")
+metadata/_edit_lock_ = true
+
+[node name="MoveCircle" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.11)
+modulate = Color(1, 1, 1, 0.270588)
+texture = ExtResource("1_m8y5g")
+metadata/_edit_lock_ = true
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.24)
+modulate = Color(0.27451, 0.27451, 0.27451, 1)
+pixel_size = 0.0472
+transparent = false
+texture = SubResource("PlaceholderTexture2D_l3sku")
+metadata/_edit_lock_ = true
+
+[node name="Arrow" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="Left" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(-9.61651e-09, 0.22, 0, -0.22, -9.61651e-09, 0, 0, 0, 0.22, -2.695, 0, 0)
+modulate = Color(1, 1, 1, 0.752941)
+texture = ExtResource("3_grcrf")
+metadata/_edit_lock_ = true
+
+[node name="Right" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(-9.61651e-09, -0.22, 0, 0.22, -9.61651e-09, 0, 0, 0, 0.22, 2.695, 0, 0)
+modulate = Color(1, 1, 1, 0.752941)
+texture = ExtResource("3_grcrf")
+metadata/_edit_lock_ = true
+
+[node name="Perfect" type="Area3D" parent="Arrow"]
+monitorable = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arrow/Perfect"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.296, 0, -0.05)
+shape = SubResource("BoxShape3D_mkgkn")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Arrow/Perfect"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.296, 0, -0.05)
+shape = SubResource("BoxShape3D_mkgkn")
+
+[node name="Good" type="Area3D" parent="Arrow"]
+monitorable = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arrow/Good"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.29124, 0.198817, -0.0325684)
+shape = SubResource("BoxShape3D_h280m")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Arrow/Good"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.291, -0.199, -0.05)
+shape = SubResource("BoxShape3D_h280m")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Arrow/Good"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.291, 0.199, -0.05)
+shape = SubResource("BoxShape3D_h280m")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Arrow/Good"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.291, -0.199, -0.05)
+shape = SubResource("BoxShape3D_h280m")
+
+[node name="Bad" type="Area3D" parent="Arrow"]
+monitorable = false
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arrow/Bad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.27213, 0.346319, -0.0195679)
+shape = SubResource("BoxShape3D_c5u8u")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Arrow/Bad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.272, -0.346, -0.05)
+shape = SubResource("BoxShape3D_c5u8u")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Arrow/Bad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.272, 0.346, -0.05)
+shape = SubResource("BoxShape3D_c5u8u")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Arrow/Bad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.272, -0.346, -0.05)
+shape = SubResource("BoxShape3D_c5u8u")
+
+[node name="Miss" type="Area3D" parent="Arrow"]
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Arrow/Miss"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.736442, -1.00666, 5.07832)
+shape = SubResource("BoxShape3D_hhpkw")
+metadata/_edit_lock_ = true
+
+[node name="PerfectSprite1" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 1, 0, 0, 0, 1, -2.29, 0, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_l78kx")
+metadata/_edit_lock_ = true
+
+[node name="PerfectSprite2" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 1, 0, 0, 0, 1, 2.3, 0, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_l78kx")
+metadata/_edit_lock_ = true
+
+[node name="GoodSprite1" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 0.75, 0, 0, 0, 1, -2.29, 0.18, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_wsf8c")
+metadata/_edit_lock_ = true
+
+[node name="GoodSprite2" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 0.75, 0, 0, 0, 1, -2.29, -0.18, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_wsf8c")
+metadata/_edit_lock_ = true
+
+[node name="GoodSprite3" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 0.75, 0, 0, 0, 1, 2.3, 0.18, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_wsf8c")
+metadata/_edit_lock_ = true
+
+[node name="GoodSprite4" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 0.75, 0, 0, 0, 1, 2.3, -0.18, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_wsf8c")
+metadata/_edit_lock_ = true
+
+[node name="BadSprite1" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 0.69, 0, 0, 0, 1, -2.26, 0.335, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_taty1")
+metadata/_edit_lock_ = true
+
+[node name="BadSprite2" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 0.69, 0, 0, 0, 1, -2.26, -0.335, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_taty1")
+metadata/_edit_lock_ = true
+
+[node name="BadSprite3" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 0.69, 0, 0, 0, 1, 2.26, 0.335, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_taty1")
+metadata/_edit_lock_ = true
+
+[node name="BadSprite4" type="Sprite3D" parent="Arrow"]
+transform = Transform3D(0.745, 0, 0, 0, 0.69, 0, 0, 0, 1, 2.26, -0.335, 0)
+visible = false
+pixel_size = 0.2
+texture = SubResource("GradientTexture1D_taty1")
+metadata/_edit_lock_ = true
+
+[node name="Combo" type="Label3D" parent="."]
+text = "x100"
+font_size = 0
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rmmhe")
+}
+
+[node name="ComboAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rmmhe")
+}
+
+[node name="BreakAnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_s85y0")
+}
+
+[connection signal="area_entered" from="Arrow/Perfect" to="." method="_on_perfect_area_entered"]
+[connection signal="area_entered" from="Arrow/Good" to="." method="_on_good_area_entered"]
+[connection signal="area_entered" from="Arrow/Bad" to="." method="_on_bad_area_entered"]
+[connection signal="area_entered" from="Arrow/Miss" to="." method="_on_miss_area_entered"]

@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://xoe8xb1kbcbt"]
+
+[ext_resource type="Script" path="res://screen/GameMain/Object.gd" id="1_e3l7u"]
+[ext_resource type="Texture2D" uid="uid://c37e76i4u5h2w" path="res://screen/GameMain/object.png" id="1_ndnq6"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_wmnx6"]
+height = 0.001
+radius = 0.501
+
+[node name="Object" type="Area3D"]
+transform = Transform3D(0.31, 0, 0, 0, 0.31, 0, 0, 0, 0.31, 0, 0, 0)
+monitoring = false
+script = ExtResource("1_e3l7u")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+texture = ExtResource("1_ndnq6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_wmnx6")

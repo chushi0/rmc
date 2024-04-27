@@ -1,0 +1,25 @@
+[package]
+edition = "2021"
+name = "rythm"
+version = "0.1.0"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1.0.82"
+ffmpeg-next = {git = "https://github.com/chushi0/rust-ffmpeg"}
+ffmpeg-sys-next = {git = "https://github.com/chushi0/rust-ffmpeg-sys"}
+godot = {git = "https://github.com/chushi0/gdext", branch = "v4.2.1", features = ["lazy-function-tables"]}
+num-traits = "0.2.18"
+osu-file-parser = "1.1.0"
+
+[profile.release]
+debug = 0
+debug-assertions = false
+incremental = false
+opt-level = 'z'
+overflow-checks = true
+strip = "symbols"

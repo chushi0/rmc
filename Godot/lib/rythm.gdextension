@@ -1,0 +1,8 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.1
+
+[libraries]
+windows.debug.x86_64 = "res://../rust/rythm/target/debug/rythm.dll"
+windows.release.x86_64 = "res://../rust/rythm/target/release/rythm.dll"
+android.release.arm64  = "res://../rust/rythm/target/aarch64-linux-android/release/librythm.so"
