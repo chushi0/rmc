@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://biwree68hbwfq"]
+[gd_scene load_steps=14 format=3 uid="uid://biwree68hbwfq"]
 
 [ext_resource type="Script" path="res://screen/GameResult/index.gd" id="1_t620j"]
+[ext_resource type="PackedScene" uid="uid://dock61r13thsd" path="res://node/ScreenAspectSprite.tscn" id="2_gxksy"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_yoc2l"]
 font_size = 36
@@ -415,7 +416,7 @@ tracks/32/keys = {
 tracks/33/type = "value"
 tracks/33/imported = false
 tracks/33/enabled = true
-tracks/33/path = NodePath("Button:visible")
+tracks/33/path = NodePath("TitleBtn:visible")
 tracks/33/interp = 1
 tracks/33/loop_wrap = true
 tracks/33/keys = {
@@ -427,7 +428,7 @@ tracks/33/keys = {
 tracks/34/type = "value"
 tracks/34/imported = false
 tracks/34/enabled = true
-tracks/34/path = NodePath("Button2:visible")
+tracks/34/path = NodePath("RetryBtn:visible")
 tracks/34/interp = 1
 tracks/34/loop_wrap = true
 tracks/34/keys = {
@@ -806,7 +807,7 @@ tracks/32/keys = {
 tracks/33/type = "value"
 tracks/33/imported = false
 tracks/33/enabled = true
-tracks/33/path = NodePath("Button:visible")
+tracks/33/path = NodePath("TitleBtn:visible")
 tracks/33/interp = 1
 tracks/33/loop_wrap = true
 tracks/33/keys = {
@@ -818,7 +819,7 @@ tracks/33/keys = {
 tracks/34/type = "value"
 tracks/34/imported = false
 tracks/34/enabled = true
-tracks/34/path = NodePath("Button2:visible")
+tracks/34/path = NodePath("RetryBtn:visible")
 tracks/34/interp = 1
 tracks/34/loop_wrap = true
 tracks/34/keys = {
@@ -841,8 +842,7 @@ metadata/_edit_lock_ = true
 [node name="Camera2D" type="Camera2D" parent="."]
 metadata/_edit_lock_ = true
 
-[node name="Background" type="Sprite2D" parent="."]
-metadata/_edit_lock_ = true
+[node name="Background" parent="." instance=ExtResource("2_gxksy")]
 
 [node name="ColorRect2" type="ColorRect" parent="."]
 offset_left = -528.0
@@ -1034,7 +1034,7 @@ offset_bottom = 629.0
 color = Color(1, 1, 1, 0)
 metadata/_edit_lock_ = true
 
-[node name="Button" type="Button" parent="."]
+[node name="TitleBtn" type="Button" parent="."]
 offset_left = 271.0
 offset_top = 225.0
 offset_right = 540.0
@@ -1042,7 +1042,7 @@ offset_bottom = 276.0
 text = "返回标题"
 metadata/_edit_lock_ = true
 
-[node name="Button2" type="Button" parent="."]
+[node name="RetryBtn" type="Button" parent="."]
 offset_left = 3.0
 offset_top = 225.0
 offset_right = 272.0
@@ -1055,5 +1055,5 @@ libraries = {
 "": SubResource("AnimationLibrary_sjnl8")
 }
 
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="Button2" to="." method="_on_button_2_pressed"]
+[connection signal="pressed" from="TitleBtn" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="RetryBtn" to="." method="_on_button_2_pressed"]

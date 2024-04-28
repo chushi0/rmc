@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://f32hawmyhln1"]
+[gd_scene load_steps=5 format=3 uid="uid://f32hawmyhln1"]
 
 [ext_resource type="Script" path="res://screen/GameTitle/index.gd" id="1_0hum5"]
+[ext_resource type="PackedScene" uid="uid://dock61r13thsd" path="res://node/ScreenAspectSprite.tscn" id="2_e5pxd"]
 [ext_resource type="PackedScene" uid="uid://dt4vt666l273d" path="res://screen/GameTitle/GyroscopeAlign.tscn" id="4_vf5y2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_24vvr"]
@@ -13,17 +14,8 @@ metadata/_edit_lock_ = true
 [node name="Camera2D" type="Camera2D" parent="."]
 metadata/_edit_lock_ = true
 
-[node name="Background" type="Sprite2D" parent="."]
-position = Vector2(-1, -1)
-metadata/_edit_lock_ = true
-
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -751.0
-offset_top = -423.0
-offset_right = 749.0
-offset_bottom = 421.0
-color = Color(0, 0, 0, 0.752941)
-metadata/_edit_lock_ = true
+[node name="Background" parent="." instance=ExtResource("2_e5pxd")]
+modulate = Color(0.27451, 0.27451, 0.27451, 1)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 

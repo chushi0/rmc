@@ -1,4 +1,4 @@
-extends Node3D
+extends Control
 
 var timings
 
@@ -21,7 +21,7 @@ var waiting = 2.0
 func _ready():
 	var level = GameStatus.level
 	$AudioStreamPlayer.stream = GameStatus.current_audio()
-	
+
 	for object in level.objects:
 		var time = object.time
 		var angle = object.position
@@ -45,9 +45,9 @@ func _ready():
 	if GameStatus.double_time:
 		$AudioStreamPlayer.pitch_scale = 1.5
 	if GameStatus.hidden:
-		$Objects.visible = false
+		$Render3D/SubViewport/Objects.visible = false
 	if GameStatus.autoplay:
-		$Camera.auto_play = true
+		$Render3D/SubViewport/Camera.auto_play = true
 
 	setup_autoplay_target( - waiting)
 
@@ -65,7 +65,7 @@ func add_object(time, angle, color: Array[float]):
 		node.scale.y = 0.21
 		node.scale.z = 0.21
 	node.set_color(color[0], color[1], color[2])
-	$Objects.add_child(node)
+	$Render3D/SubViewport/Objects.add_child(node)
 	objects.push_back({
 		"node": node,
 		"time": time / 1000.0,
@@ -73,15 +73,17 @@ func add_object(time, angle, color: Array[float]):
 	})
 
 func _process(delta):
+	update_subviewport_variables()
+	
 	if waiting > 0:
 		waiting -= delta
 		if waiting > 0:
-			$Camera.position.z = waiting
+			$Render3D/SubViewport/Camera.position.z = waiting
 			return
 		else:
 			$AudioStreamPlayer.play()
 	var time = $AudioStreamPlayer.get_playback_position()
-	$Camera.position.z = -time
+	$Render3D/SubViewport/Camera.position.z = -time
 
 	# 判定
 	while objects.size() > 0&&objects[0].time < time:
@@ -91,30 +93,30 @@ func _process(delta):
 		if determine == 0:
 			node.make_determine(MISS)
 			determine = 1
-		if $Camera.auto_play:
+		if $Render3D/SubViewport/Camera.auto_play:
 			determine = 4
 		if GameStatus.all_perfect:
 			if determine == 3:
 				determine = 1
 			if determine == 2:
 				determine = 1
-		$Objects.remove_child(node)
+		$Render3D/SubViewport/Objects.remove_child(node)
 		node.queue_free()
 		# 判定文字展示
 		var determine_node = preload ("res://screen/GameMain/Determine.tscn").instantiate()
 		determine_node.position.z = 0
 		determine_node.position.x = 2.3 * sin(object.angle)
 		determine_node.position.y = 2.3 * - cos(object.angle)
-		$Camera.add_child(determine_node)
+		$Render3D/SubViewport/Camera.add_child(determine_node)
 		determine_node.anim(determine)
 		# combo
 		if determine >= GOOD:
-			$Camera.increase_combo()
+			$Render3D/SubViewport/Camera.increase_combo()
 		else:
-			$Camera.clear_combo()
-		if $Camera.combo > max_combo:
-			max_combo = $Camera.combo
-		score += ($Camera.combo + 1) * [0, 50, 100, 300][determine - 1] * GameStatus.score_mul
+			$Render3D/SubViewport/Camera.clear_combo()
+		if $Render3D/SubViewport/Camera.combo > max_combo:
+			max_combo = $Render3D/SubViewport/Camera.combo
+		score += ($Render3D/SubViewport/Camera.combo + 1) * [0, 50, 100, 300][determine - 1] * GameStatus.score_mul
 		acc_count[determine - 1] += 1
 		change_score_and_acc()
 		setup_autoplay_target(time)
@@ -129,8 +131,9 @@ func _process(delta):
 		break
 	if current_timing != null&&current_timing.kiai_mode&&!GameStatus.no_kiai:
 		if !in_kiai_mode:
-			$ParticlesLeft.emitting = true
-			$ParticlesRight.emitting = true
+			$Render2D/SubViewport/Index2d.kiai_start()
+			#$ParticlesLeft.emitting = true
+			#$ParticlesRight.emitting = true
 		in_kiai_mode = true
 		var spb = float(current_timing.mspb) / 1000.0
 		# 修正spb误差
@@ -141,27 +144,34 @@ func _process(delta):
 				last_beat_time = float(current_timing.time) / 1000.0
 			while last_beat_time + spb < time:
 				last_beat_time += spb
-			$Camera.beat()
+			$Render2D/SubViewport/Index2d.kiai_beat()
+			$Render3D/SubViewport/Camera.beat()
 	else:
 		in_kiai_mode = false
 
 	# 如果下一个物件在3秒以上，隐藏
 	if objects.size() == 0 or objects[0].time - time > 4.5:
-		$Camera.fade_out()
+		$Render3D/SubViewport/Camera.fade_out()
+		$Render2D/SubViewport/Index2d.fade_out()
 
 	# 如果下一个物件在1秒以内，显示
 	if objects.size() > 0 and objects[0].time - time < 2:
-		$Camera.fade_in()
+		$Render3D/SubViewport/Camera.fade_in()
+		$Render2D/SubViewport/Index2d.fade_in()
 
 func setup_autoplay_target(time):
 	if objects.size() > 0:
-		$Camera.auto_play_target(objects[0].angle, objects[0].time)
+		$Render3D/SubViewport/Camera.auto_play_target(objects[0].angle, objects[0].time)
 
 func change_score_and_acc():
 	var new_score = "%010d" % score
 	if $Score.text != new_score:
 		$Score.text = new_score
 	$Acc.text = "%.02f%%" % (float(acc_count[1] * 50 + acc_count[2] * 100 + acc_count[3] * 300) / float(acc_count[1] + acc_count[2] + acc_count[3] + acc_count[0]) / 3.0)
+
+func update_subviewport_variables():
+	$Render2D/SubViewport/Index2d.playback_time = $AudioStreamPlayer.get_playback_position()
+	$Render2D/SubViewport/Index2d.input_angle = $Render3D/SubViewport/Camera.input_angle
 
 func _on_audio_stream_player_finished():
 	GameStatus.perfect_count = acc_count[3]

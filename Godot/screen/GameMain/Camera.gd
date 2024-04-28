@@ -14,28 +14,19 @@ var auto_play = false
 var angle_start = {"time": 0, "target": PI / 2}
 var angle_target = {"time": 0, "target": PI / 2}
 
-var decoder: VideoDecoder
-var next_frame_video_time: float
-var video_image: Image
-var is_video_image = false
-
 # fade_out -> 变为false
 # fade_in -> 变为true
 var now_showing: bool = true
 
 func _ready():
-	$Sprite3D.texture = ImageTexture.create_from_image(GameStatus.current_background())
-	
-	if GameStatus.mvmode and FileAccess.file_exists(GameStatus.current_video_path()):
-		decoder = VideoDecoder.new()
-		decoder.start_decode_thread(GameStatus.current_video_path())
-		next_frame_video_time = 0
-		video_image = Image.new()
-	
 	if Engine.has_singleton("GDExtensionAndroidSensors"):
 		android_sensor = Engine.get_singleton("GDExtensionAndroidSensors")
 	
 	clear_combo()
+	
+	# 开始渲染后，更新下圆环的modulate可以解决渲染锯齿问题
+	# 虽然不知道为什么，但先更新一下
+	$AnimationPlayer.play("fix_circle_bug")
 
 func _on_perfect_area_entered(area):
 	area.make_determine(PERFECT)
@@ -50,48 +41,26 @@ func _on_miss_area_entered(area):
 	area.make_determine(MISS)
 
 func _process(delta):
-	update_video(delta)
 	update_input(delta)
 
-func update_video(delta):
-	if decoder == null:
-		return
-	if decoder.is_finish():
-		decoder = null
-		$Sprite3D.texture = ImageTexture.create_from_image(GameStatus.current_background())
-		return
-	var frame = null
-	while -position.z > next_frame_video_time:
-		frame = decoder.try_recv_frame()
-		if frame == null || frame.width == 0 || frame.height == 0:
-			frame = null
-			break
-		next_frame_video_time += 1.0 / frame.rate
-	if frame != null:
-		video_image.set_data(frame.width, frame.height, false, Image.FORMAT_RGB8, frame.get_bytes())
-		if is_video_image:
-			$Sprite3D.texture.update(video_image)
-		else:
-			$Sprite3D.texture.set_image(video_image)
-
 func update_input(delta):
-	$MoveCircle.position.z += delta * 1.5
+	$MoveCircle.position.z += delta * 0.5
 	
 	update_input_angle(delta)
 	
-	if auto_play:
-		if -position.z >= angle_target.time:
-			$Arrow.rotation.z = angle_target.target
-		elif angle_target.time > angle_start.time:
-			$Arrow.rotation.z = angle_start.target + (angle_target.target - angle_start.target) * (-position.z - angle_start.time) / (angle_target.time - angle_start.time)
-	else:
-		$Arrow.rotation.z = input_angle
-	
+	$Arrow.rotation.z = input_angle
 	if GameStatus.fix_arrow:
 		$Circle.rotation.z = $Arrow.rotation.z
 		$Camera3D.rotation.z = $Arrow.rotation.z
 
 func update_input_angle(delta):
+	if auto_play:
+		if -position.z >= angle_target.time:
+			input_angle = angle_target.target
+		elif angle_target.time > angle_start.time:
+			input_angle = angle_start.target + (angle_target.target - angle_start.target) * (-position.z - angle_start.time) / (angle_target.time - angle_start.time)
+		return
+	
 	# Desktop
 	var base = 3
 	if Input.is_key_pressed(KEY_CTRL):
@@ -115,6 +84,7 @@ func update_input_angle(delta):
 func beat():
 	if !now_showing:
 		return
+	$AnimationPlayer.stop()
 	$AnimationPlayer.play("kiai")
 	$MoveCircle.position.z = 0
 

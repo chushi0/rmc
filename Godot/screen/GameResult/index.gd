@@ -2,6 +2,7 @@ extends Node2D
 
 func _ready():
 	$Background.texture = ImageTexture.create_from_image(GameStatus.current_background())
+	$Background.update_drawing_rect()
 	
 	var accuracy = (float(GameStatus.perfect_count * 300 + GameStatus.good_count * 100 + GameStatus.bad_count * 50) / float(GameStatus.perfect_count + GameStatus.good_count + GameStatus.bad_count + GameStatus.miss_count) / 3.0)
 	

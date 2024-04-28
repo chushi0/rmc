@@ -29,6 +29,7 @@ func _process(_delta):
 
 func reload_texture():
 	$Background.texture = ImageTexture.create_from_image(GameStatus.current_background())
+	$Background.update_drawing_rect()
 
 func play_bgm():
 	$AudioStreamPlayer.play(GameStatus.level.preview_time / 1000.0)
