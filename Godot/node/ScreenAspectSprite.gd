@@ -8,7 +8,7 @@ var last_vp_rect: Vector2
 func _ready():
 	update_drawing_rect()
 
-func _process(_delta):	
+func _process(_delta):
 	update_drawing_rect()
 
 func update_drawing_rect():

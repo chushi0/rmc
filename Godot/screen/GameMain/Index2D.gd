@@ -9,10 +9,6 @@ var next_frame_video_time: float # 视频下一帧的时间
 var video_image: Image # 视频图像（用于update图像数据）
 var is_video_image = false # 当前是否正在展示视频
 
-# fade_out -> 变为false
-# fade_in -> 变为true
-var now_showing: bool = true
-
 func _ready():
 	# 加载背景图片
 	_load_bg()
@@ -73,8 +69,6 @@ func _update_input():
 		set_rotation(input_angle)
 
 func kiai_beat():
-	if !now_showing:
-		return
 	$KiaiModeBeat.play("kiai")
 
 func kiai_start():
@@ -82,13 +76,7 @@ func kiai_start():
 	$ParticlesRight.emitting = true
 
 func fade_out():
-	if !now_showing:
-		return
-	now_showing = false
 	$BreakAnim.play("fade_out")
 
 func fade_in():
-	if now_showing:
-		return
-	now_showing = true
 	$BreakAnim.play("fade_in")

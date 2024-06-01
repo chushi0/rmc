@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://x0hcxagr5cdj"]
+
+[ext_resource type="Script" path="res://screen/GameMain/Index3d.gd" id="1_87ydl"]
+[ext_resource type="PackedScene" uid="uid://ow4dnk2vmv0n" path="res://screen/GameMain/Camera.tscn" id="1_krc7y"]
+
+[node name="Index3d" type="Node3D"]
+script = ExtResource("1_87ydl")
+
+[node name="Camera" parent="." instance=ExtResource("1_krc7y")]
+
+[node name="Objects" type="Node3D" parent="."]

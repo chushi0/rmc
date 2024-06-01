@@ -14,19 +14,11 @@ var auto_play = false
 var angle_start = {"time": 0, "target": PI / 2}
 var angle_target = {"time": 0, "target": PI / 2}
 
-# fade_out -> 变为false
-# fade_in -> 变为true
-var now_showing: bool = true
-
 func _ready():
 	if Engine.has_singleton("GDExtensionAndroidSensors"):
 		android_sensor = Engine.get_singleton("GDExtensionAndroidSensors")
 	
 	clear_combo()
-	
-	# 开始渲染后，更新下圆环的modulate可以解决渲染锯齿问题
-	# 虽然不知道为什么，但先更新一下
-	$AnimationPlayer.play("fix_circle_bug")
 
 func _on_perfect_area_entered(area):
 	area.make_determine(PERFECT)
@@ -41,11 +33,10 @@ func _on_miss_area_entered(area):
 	area.make_determine(MISS)
 
 func _process(delta):
+	$MoveCircle.position.z += delta
 	update_input(delta)
 
 func update_input(delta):
-	$MoveCircle.position.z += delta * 0.5
-	
 	update_input_angle(delta)
 	
 	$Arrow.rotation.z = input_angle
@@ -82,8 +73,6 @@ func update_input_angle(delta):
 		input_angle = -input_angle
 
 func beat():
-	if !now_showing:
-		return
 	$AnimationPlayer.stop()
 	$AnimationPlayer.play("kiai")
 	$MoveCircle.position.z = 0
@@ -118,13 +107,7 @@ func clear_combo():
 	$Combo.text = ""
 
 func fade_out():
-	if !now_showing:
-		return
-	now_showing = false
 	$BreakAnimationPlayer.play("fade_out")
 
 func fade_in():
-	if now_showing:
-		return
-	now_showing = true
 	$BreakAnimationPlayer.play("fade_in")
