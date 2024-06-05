@@ -56,6 +56,7 @@ func _update_video():
 			$Background.update_drawing_rect()
 			$BgForBg.texture = $Background.texture
 			$BgForBg.update_drawing_rect()
+			is_video_image = true
 
 func _update_particles_transform():
 	var size = get_viewport_rect().size
